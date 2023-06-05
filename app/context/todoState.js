@@ -7,7 +7,7 @@ import todoReducer from "./todoReducer";
 import axios from "axios";
 
 
-const URI = "http://localhost/api-auth/controllers/userController.php";
+const URI = "http://localhost/php-api/controllers/userController.php?formatoPost=HTML";
 const TodoState = ({children}) => {
 
     const initialState = {
@@ -22,7 +22,8 @@ const TodoState = ({children}) => {
     //Registrar nuevos usuarios
     const signUpUser = async datos => {
         try {
-            const respuesta = await clienteAxios.post('/', datos);
+            //Uso la funcion cliente axios para traer la api e usarla luego en otro componente.  //Se le pasa el endpoint que se necesita para la respectiva funcion, aqui traemos el endopint de formatoPost creado en la api de PHP
+            const respuesta = await clienteAxios.post('?formatoPost=HTML',datos);
             dispatch({
                 type: REGISTRO_EXITOSO, 
                 payload: respuesta.data.msg

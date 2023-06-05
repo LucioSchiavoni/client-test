@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const clienteAxios = axios.create({
-    baseURL: "http://localhost/api-auth/controllers/userController.php"
+    baseURL: "http://localhost/php-api/controllers/userController.php"
     
 });
 

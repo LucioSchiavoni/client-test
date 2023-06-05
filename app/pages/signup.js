@@ -1,117 +1,87 @@
 "use client";
-import React, { useContext, useState } from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useContext, useState } from 'react';
 import todoContext from '../context/todoContext';
+import axios from 'axios';
+const signup = () => {
 
+    const [ci, setCi] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [fnac, setFnac] = useState('');
+    const [email, setEmail] = useState('');
+    const [clave, setClave] = useState('');
+    const [sexo, setSexo] = useState('');
 
+  const TodoContext = useContext(todoContext);
+  const{signUpUser} = TodoContext;
 
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const signup = () => {
+  const formData = new FormData();
+  formData.append('ci', ci);
+  formData.append('nombre', nombre);
+  formData.append('apellido', apellido);
+  formData.append('fnac', fnac);
+  formData.append('email', email);
+  formData.append('clave', clave);
+  formData.append('sexo', sexo);
 
-    const TodoContext = useContext(todoContext);
-    const { signUpUser } = TodoContext;
-
-
-
-    const formik = useFormik({
-        initialValues: {
-            message: '',
-            name: '',
-            email: '',
-            pwd: '',
-        },
-        validationSchema: Yup.object({
-
-            name: Yup.string().required("El nombre es obligatorio"),
-            email: Yup.string().required("Campo Obligatorio").email("Debe ser un email Valido"),
-            pwd: Yup.string().required("Campo Obligatorio")
-            
-        }),
-
-        onSubmit: value => {
-            const formData = new FormData();
-            formData.append('name', value.name);
-            formData.append('email', value.email);
-            formData.append('pwd', value.pwd);
-         
-            signUpUser(formData)
-        }
-
-    })
-
-
+  try {
+    ///Se puede hacer de esta manera (la cual no se esta usando)
+    const response = await axios.post('http://localhost/php-api/controllers/userController.php?formatoPost=HTML', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+///O tambien se puede hacer con el useContext, traigo la funcion y se utiliza para guardar el usuario(la manera que la estoy usando actualmente)
+    signUpUser(formData) 
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
-<>
-<div className='py-64 flex items-center  w-80 m-auto h-80  justify-center '>
-<form onSubmit={formik.handleSubmit} className='mt-20 bg-base-100 p-10 text-white' method='POST'>
-<div className='form-control mb-5'>
-<label htmlFor="name">Nombre</label>
-<input type="text"
-                                    className='h-8 rounded-lg p-2 '
-                                    id='name'
-                                    placeholder='Nombre de Usuario'
-                                    value={formik.values.name}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                        required
-                                />
-                                {formik.touched.name && formik.errors.name ? (
-                                    <div className='text-white'>
-
-                                        <p>{formik.errors.name}.</p>
-                                    </div>
-                                ) : null}
-</div>
-<div className='form-control mb-5'> 
-    <label htmlFor="email">Correo</label>
-      <input type="email"
-                                    className='h-8 rounded-lg p-2'
-                                    id='email'
-                                    placeholder='Nombre de Usuario'
-                                    value={formik.values.email}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                        required
-                                />
-                                {formik.touched.email && formik.errors.email ? (
-                                    <div className='text-white'>
-
-                                        <p>{formik.errors.email}.</p>
-                                    </div>
-                                ) : null}
-
-</div>
-<div className='form-control mb-5'> 
-    <label htmlFor="pwd">Password</label>
-         <input type="password"
-                                    className='h-8 rounded-lg p-2'
-                                    id='pwd'
-                                        minLength="8"
-                                        required
-                                    placeholder='Contraseña'
-                                    value={formik.values.pwd}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                />
-                                <div> <p className='font-sans tracking-tight text-sm italic text-white'>No compartiremos tus datos con nadie.</p> </div>
-                                {formik.touched.pwd && formik.errors.pwd ? (
-                                    <div className='text-white'>
-
-                                        <p>{formik.errors.pwd}.</p>
-                                    </div>
-                                ) : null}
-
-</div>
-
-
-    <button type='submit' className='w-24 h-10 bg-white text-black rounded-lg hover:scale-125 transition duration-300 delay-150'>Enviar</button>
-</form>
-</div>
-</>
-  )
-}
-
+    <div className='m-auto w-80 text-white'>
+        <div className='py-64 '>
+    <form onSubmit={handleSubmit} className='glass p-10 text-sky-900 text-2xl font-extrabold ' method='POST'>
+        <div className='form-control mb-4'>
+                <label htmlFor="ci">Cedula</label>
+      <input type="text" value={ci} onChange={(e) => setCi(e.target.value)} placeholder="Cedula" className='input input-info text-white' name='ci' />
+      
+      </div>
+        <div className='form-control mb-4'>
+                <label htmlFor="nombre">Nombre</label>
+      <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre" className='input input-info text-white' name='nombre' />
+      
+      </div>
+        <div className='form-control mb-4'>
+                <label htmlFor="apellido">Apellido</label>
+      <input type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder="Apellido" className='input input-info text-white'  name='apellido' />
+      </div>
+          <div className='form-control mb-4'>
+                <label htmlFor="fnac">Fecha de nacimiento</label>
+      <input type="text" value={fnac} onChange={(e) => setFnac(e.target.value)} placeholder="Fecha de nacimiento" className='input input-info text-white' name='fnac' />
+      </div>
+ 
+      <div className='form-control mb-4'>
+            <label htmlFor="email">Correo electrónico</label>
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Correo electrónico" name='email'  className='input text-white input-info'/>
+      </div>
+      <div className='form-control mb-4'>
+        <label htmlFor="clave">Contraseña</label>
+      <input type="password" value={clave} onChange={(e) => setClave(e.target.value)} placeholder="Contraseña" name='clave' className='input input-info text-white'/>
+      </div>
+          <div className='form-control mb-4'>
+                <label htmlFor="sexo">Genero</label>
+      <input type="text" value={sexo} onChange={(e) => setSexo(e.target.value)} placeholder="Genero" className='input input-info text-white' name='sexo' />
+      </div>
+      <button type="submit" className='btn mt-10 bg-sky-900 glass hover:scale-125 transition-all duration-400 delay-150 hover:bg-sky-900'>Enviar</button>
+    </form>
+    </div>
+    </div>
+    
+  );
+};
 
 export default signup;

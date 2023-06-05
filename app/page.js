@@ -4,20 +4,13 @@ import Signup from "./pages/signup"
 
 export default function Home() {
   return (
-   
       <RootLayout>
-        <div className="gap-10">
-        <div className="">
+      <div className="h-full bg-[url(https://wpengine.com/builders/wp-content/uploads/wordpress-default-gradients.jpg)]  bg-cover  ">  
         <Header/>
+        <Signup/>
         </div>
-    <div className="h-screen bg-white  ">
-   
   
-      <Signup/>
- 
-    </div>
-    </div>
     </RootLayout>
-   
+  
   )
 }
