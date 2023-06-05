@@ -7,7 +7,7 @@ import todoReducer from "./todoReducer";
 import axios from "axios";
 
 
-const URI = "http://localhost/php-api/controllers/userController.php?formatoPost=HTML";
+
 const TodoState = ({children}) => {
 
     const initialState = {
